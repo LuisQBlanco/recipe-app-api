@@ -4,7 +4,7 @@ from rest_framework import serializers
 
 
 class UserSerializer(serializers.ModelSerializer):
-    """Serializer for the uzers object"""
+    """Serializer for the users object"""
 
     class Meta:
         model = get_user_model()
@@ -14,6 +14,16 @@ class UserSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         """Create a new user with encryted password and return it"""
         return get_user_model().objects.create_user(**validated_data)
+
+    def update(self, instance, validated_date):
+        """Update a user, setting the password correctly and return it"""
+        password = validated_date.pop('password', None)
+        user = super().update(instance, validated_date)
+
+        if password:
+            user.set_password(password)
+            user.save()
+        return user
 
 
 class AuthTokenSerializer(serializers.Serializer):

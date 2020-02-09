@@ -1,0 +1,44 @@
+version: "3"
+
+services:
+  app:
+    build: 
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+    ports:
+      - 8000:8000
+    volumes:
+      - ../app:/recipeappapi
+    command: 
+      sh -c "python manage.py wait_for_db &&
+            python manage.py migrate &&
+            python manage.py runserver 0.0.0.0:8000"
+    # command: 
+    #   # sleep infinity
+    #   python manage.py wait_for_db &&
+    #   python manage.py migrate &&
+    #   python manage.py runserver 0.0.0.0:8000
+    # command: 
+      # WORKDIR /app
+      # sh -c "python manage.py runserver 0.0.0.0:8000"
+
+    environment:
+      - DB_HOST=db
+      - DB_NAME=app
+      - DB_USER=postgres
+      - DB_PASS=supersecretpassword
+    depends_on:
+      - db
+
+    # links:
+    #   - db
+
+  db:
+    image: postgres:10-alpine
+    # restart: unless-stopped
+    # ports:
+    #   - 5430:5430
+    environment: 
+      - POSTGRES_DB=app
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=supersecretpassword
