@@ -49,20 +49,20 @@ class PrivateTagsApiTests(TestCase):
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.data, serializer.data)
 
-        def test_tag_limited_to_user(self):
-            """Test that tags returned are for the authenticated user"""
-            user2 = get_user_model().objects.create_user(
-                'other@@sasaamazingsolutions.com',
-                'testpass'
-            )
-            Tag.objects.create(user=user2, name='Fruity')
-            tag = Tag.objects.create(user=self.user, name='Comfort Food')
+    def test_tag_limited_to_user(self):
+        """Test that tags returned are for the authenticated user"""
+        user2 = get_user_model().objects.create_user(
+            'other@@sasaamazingsolutions.com',
+            'testpass'
+        )
+        Tag.objects.create(user=user2, name='Fruity')
+        tag = Tag.objects.create(user=self.user, name='Comfort Food')
 
-            res = self.client.get(TAGS_URL)
+        res = self.client.get(TAGS_URL)
 
-            self.assertEqual(res.status_code, status.HTTP_200_OK)
-            self.assertEqual(len(res.data), 1)
-            self.assertEqual(res.data[0]['name'], tag.name)
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(res.data), 1)
+        self.assertEqual(res.data[0]['name'], tag.name)
 
     def test_create_tag_successful(self):
         """Test creating a new tag"""

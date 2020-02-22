@@ -12,6 +12,7 @@ ME_URL = reverse('user:me')
 
 
 def create_user(**params):
+    """Helper function to create new user"""
     return get_user_model().objects.create_user(**params)
 
 
@@ -101,17 +102,17 @@ class PublicUserApiTests(TestCase):
         self.assertNotIn('token', res.data)
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
 
-    # def test_retrieve_user_unauthorized(self):
-    #     """Test that authentication is required for users"""
-    #     print("prueba LQ ")
-    #     print(ME_URL)
-    #     # print(self.client.status_code)
-    #     # print(self.client.get(ME_URL))
-    #     res = self.client.get(ME_URL)
-    #     print("paso 2 LQ ")
-    #     print(res.status_code)
+    def test_retrieve_user_unauthorized(self):
+        """Test that authentication is required for users"""
+        # print("prueba LQ ")
+        # print(ME_URL)
+        # print(self.client.status_code)
+        # print(self.client.get(ME_URL))
+        res = self.client.get(ME_URL)
+        # print("paso 2 LQ ")
+        # print(res.status_code)
 
-    #     self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
 
 
 class PrivateUserApiTests(TestCase):

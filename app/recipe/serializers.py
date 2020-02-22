@@ -25,7 +25,7 @@ class RecipeSerializer(serializers.ModelSerializer):
     """Serialize a recipe"""
     ingredients = serializers.PrimaryKeyRelatedField(
         many=True,
-        queryset=Tag.objects.all()
+        queryset=Ingredient.objects.all()
     )
     tags = serializers.PrimaryKeyRelatedField(
         many=True,
